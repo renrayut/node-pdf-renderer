@@ -1,8 +1,8 @@
 {
   "name": "pdf-renderer",
   "version": "1.0.0",
-  "dependencies": {
   "type": "module",
-    "pdfkit": "^0.17.2"
+  "dependencies": {
+    "pdfkit": "^0.13.0"
   }
 }

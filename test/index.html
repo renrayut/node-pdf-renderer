@@ -318,8 +318,8 @@ Thank you for your business!`
                 showLoading(true);
                 clearStatus();
 
-                // Update with your Vercel domain
-                const apiUrl = window.location.origin + '/api/generate-pdf';
+                // Vercel domain
+                const apiUrl = 'https://node-pdf-renderer.vercel.app/api/generate-pdf';
                 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
