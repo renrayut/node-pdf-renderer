@@ -197,6 +197,12 @@
             border-radius: 3px;
             font-family: 'Courier New', monospace;
         }
+
+        small {
+            color: #999;
+            margin-top: 5px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -205,6 +211,12 @@
         <p class="subtitle">Fill in the form and generate your PDF document</p>
 
         <form id="pdfForm">
+            <div class="form-group">
+                <label for="bearerToken">Bearer Token (JWT) *</label>
+                <input type="password" id="bearerToken" name="bearerToken" required placeholder="Paste your JWT token here">
+                <small>Required for Azure APIM authentication</small>
+            </div>
+
             <div class="form-group">
                 <label for="title">Document Title *</label>
                 <input type="text" id="title" name="title" required placeholder="Enter document title">
@@ -250,7 +262,7 @@
 
         <div class="sample-data">
             <strong>Sample API Endpoint:</strong> POST /api/generate-pdf<br>
-            <strong>Base URL:</strong> <code>https://your-vercel-domain.vercel.app</code>
+            <strong>Base URL:</strong> <code>https://rayutapim.azure-api.net</code>
         </div>
     </div>
 
@@ -306,6 +318,8 @@ Thank you for your business!`
         document.getElementById('pdfForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const bearerToken = document.getElementById('bearerToken').value;
+
             const formData = {
                 title: document.getElementById('title').value,
                 author: document.getElementById('author').value,
@@ -318,13 +332,14 @@ Thank you for your business!`
                 showLoading(true);
                 clearStatus();
 
-                // Vercel domain
-                const apiUrl = 'https://node-pdf-renderer.vercel.app/api/generate-pdf';
+                // Azure APIM endpoint
+                const apiUrl = 'https://rayutapim.azure-api.net/api/generate-pdf';
                 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${bearerToken}`
                     },
                     body: JSON.stringify(formData)
                 });
@@ -347,7 +362,7 @@ Thank you for your business!`
                 showLoading(false);
             } catch (error) {
                 console.error('Error:', error);
-                showStatus(`✗ Error: ${error.message}. Make sure you update the API URL in the code.`, 'error');
+                showStatus(`✗ Error: ${error.message}`, 'error');
                 showLoading(false);
             }
         });
